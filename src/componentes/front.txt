@@ -1,0 +1,17 @@
+campo de texto [endereço], botão request MPE1,
+campo de texto [endereço], botão request MPE2,
+
+label amount to receive,
+label Faucet is on/off
+
+campo de texto [float .2], botão deposit MPE1,
+campo de texto [float .2], botão deposit MPE2,
+
+------------------ onlyOwner -------------
+
+botão on/off faucet,
+
+campo de texto [float .2], botão set amount,
+
+campo de texto [endereço MPE1],
+campo de texto [endereço MPE2], botão change MPE1 e MPE2,
