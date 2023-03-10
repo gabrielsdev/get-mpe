@@ -1,8 +1,9 @@
-campo de texto [endereço], botão request MPE1,
-campo de texto [endereço], botão request MPE2,
 
 label amount to receive,
 label Faucet is on/off
+
+campo de texto [float .2], botão request MPE1,
+campo de texto [float .2], botão request MPE2,
 
 campo de texto [float .2], botão deposit MPE1,
 campo de texto [float .2], botão deposit MPE2,
