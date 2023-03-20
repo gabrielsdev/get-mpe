@@ -5,7 +5,7 @@ import './CampoTextoBotao.css';
 const CampoTextoBotao = (props) => {
     return(
         <div className='campo-texto-botao'>
-            <CampoTexto label={props.label} inputValue={props.inputValue} placeholder={props.placeholder} type="number" step="0.01" min="0"/>
+            <CampoTexto label={props.label} inputValue={props.inputValue} placeholder={props.placeholder}/>
             <Botao name={props.buttonName} submit={props.submit}/>
         </div>
     )

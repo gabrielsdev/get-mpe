@@ -3,27 +3,13 @@ import './FaucetStatus.css';
 import Conn from '../../connection.ts';
 
 const FaucetStatus = () => {
-    
-    /*useEffect(() => {
-        if(window.ethereum) {
-          window.ethereum.on('chainChanged', () => {
-            window.location.reload();
-          })
-          window.ethereum.on('accountsChanged', () => {
-            window.location.reload();
-          })
-      
-          // Your extra code here
-        }
-      })*/
-
-
 
     const [amount, setAmount] = useState(0);
     const [flag, isFaucetEnabled] = useState(false);
      useEffect(() => { 
         async function obtemDados() {
             var conn = new Conn();
+            await conn.connect();
             var quant = (await conn.getAmount()).toNumber()/100;
             var enable = await conn.isFaucetEnabled();
             setAmount(quant);

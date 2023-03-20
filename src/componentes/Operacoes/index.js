@@ -13,17 +13,26 @@ const Operacoes = () => {
 
     useEffect(() => { 
         async function obtemDados() {
+            await conn.connect();
             isFaucetEnabled(await conn.isFaucetEnabled());
             isAdmin(await conn.isAdmin());
     };
        obtemDados();
     }, []);
 
+    conn.getEthereum().on('accountsChanged', async () => {
+        if(await conn.checkWalletConnection()){
+            isAdmin(await conn.isAdmin());
+        }
+     })
+
     const [obtainMPE1Value, setObtainMPE1Value] = useState(0);
     const [obtainMPE2Value, setObtainMPE2Value] = useState(0);
     const [depositMPE1Value, setDepositMPE1Value] = useState(0);
     const [depositMPE2Value, setDepositMPE2Value] = useState(0);
     const [amountValue, setNewAmount] = useState(0);
+    const [mpe1AddressValue, setNewMPE1Address] = useState("");
+    const [mpe2AddressValue, setNewMPE2Address] = useState("");
 
     const setFaucetState = async () => {
         await conn.setFaucetState(!flagFaucet);
@@ -57,26 +66,20 @@ const Operacoes = () => {
         await conn.setAmount(amountValue);
     }
 
+    const changeMPEs = async () => {
+        await conn.changeMPEs(mpe1AddressValue, mpe2AddressValue);
+    }
+
     let faucet;
     let classEnableFaucetButton;
     let nameEnableFaucetButton;
     if (flagFaucet) {
-        faucet = <React.Fragment>
+        faucet = 
                     <div className='usuario'>
                         <h2>Obter MPE</h2>
                         <CampoTextoBotao inputValue={inputvalue => setObtainMPE1Value(inputvalue)} submit={obtainMPE1} label="Quantidade de MPE1 para receber:" placeholder="Digite a quantidade de MPE1 que deseja receber" buttonName="Obter MPE1"/>
                         <CampoTextoBotao inputValue={inputvalue => setObtainMPE2Value(inputvalue)} submit={obtainMPE2} label="Quantidade de MPE2 para receber:" placeholder="Digite a quantidade de MPE2 que deseja receber" buttonName="Obter MPE2"/>
-                    </div>
-                    <div className='usuario'>
-                        <h2>Depositar MPE</h2>
-                        <CampoTexto inputValue={inputvalue => setDepositMPE1Value(inputvalue)} label="Quantidade de MPE1 para depositar:" placeholder="Digite a quantidade de MPE1 que deseja depositar"/>
-                        <Botao submit={approveDepositMPE1} classState="approve" name="Aprovar"/>
-                        <Botao submit={depositMPE1} name="Depositar MPE1"/>
-                        <CampoTexto inputValue={inputvalue => setDepositMPE2Value(inputvalue)} label="Quantidade de MPE2 para depositar:" placeholder="Digite a quantidade de MPE2 que deseja depositar"/>
-                        <Botao submit={approveDepositMPE2} classState="approve" name="Aprovar"/>
-                        <Botao submit={depositMPE2} name="Depositar MPE2"/>
-                    </div>
-                </React.Fragment>;
+                    </div>;
         classEnableFaucetButton = "disable";
         nameEnableFaucetButton = "Desativar Faucet";
     } else {
@@ -91,15 +94,24 @@ const Operacoes = () => {
                     <Botao submit={setFaucetState} classState={classEnableFaucetButton} name={nameEnableFaucetButton}/>
                     <CampoTextoBotao inputValue={inputvalue => setNewAmount(inputvalue)} submit={setAmount} label="Valor máximo para obter MPE1 e MPE2" placeholder="Digite o novo valor máximo para obter MPE1 e MPE2" buttonName="Alterar valor"/>
                     <h2>Trocar endereços dos tokens MPE1 e MPE2</h2>
-                    <CampoTexto label="Endereço do MPE1:" placeholder="Digite o endereço do token MPE1"/>
-                    <CampoTexto label="Endereço do MPE2:" placeholder="Digite o endereço do token MPE2"/>
-                    <Botao name="Trocar endereços de MPE1 e MPE2"/>
+                    <CampoTexto inputValue={inputvalue => setNewMPE1Address(inputvalue)} label="Endereço do MPE1:" placeholder="Digite o endereço do token MPE1" type="text" step="none" min="none"/>
+                    <CampoTexto inputValue={inputvalue => setNewMPE2Address(inputvalue)} label="Endereço do MPE2:" placeholder="Digite o endereço do token MPE2" type="text" step="none" min="none"/>
+                    <Botao submit={changeMPEs} name="Trocar endereços de MPE1 e MPE2"/>
                 </div>
     }
 
     return (
         <div className='operacoes'>
             {faucet}
+            <div className='usuario'>
+                <h2>Depositar MPE</h2>
+                <CampoTexto inputValue={inputvalue => setDepositMPE1Value(inputvalue)} label="Quantidade de MPE1 para depositar:" placeholder="Digite a quantidade de MPE1 que deseja depositar"/>
+                <Botao submit={approveDepositMPE1} classState="approve" name="Aprovar"/>
+                <Botao submit={depositMPE1} name="Depositar MPE1"/>
+                <CampoTexto inputValue={inputvalue => setDepositMPE2Value(inputvalue)} label="Quantidade de MPE2 para depositar:" placeholder="Digite a quantidade de MPE2 que deseja depositar"/>
+                <Botao submit={approveDepositMPE2} classState="approve" name="Aprovar"/>
+                <Botao submit={depositMPE2} name="Depositar MPE2"/>
+            </div>
             {admin}
         </div>
     )
