@@ -66,7 +66,7 @@ function App() {
     conteudo = 
     <div className="aviso">
       <div>
-        Por favor, conecte-se à rede {conn.getNameNetwork()} e tente novamente!
+        Por favor, conecte-se à rede Sepolia ou Goerli e tente novamente!
       </div>
     </div>;
   } 
